@@ -5,7 +5,6 @@
 #   def initialize(name, lives)
 #     @name = name
 #     @lives = lives
-#     @score = 0
 #   end
 
 #   def solve(answer)
@@ -18,9 +17,6 @@
 # end
 
 class Game
-  #just needs to run game turn to turn
-  #Checking in game should end or not
-  #but how? Check player lives? Yes!
   def initialize(players)
     @players = players
     @inSession = true
@@ -31,14 +27,13 @@ class Game
     a = rand(1..20)
     b = rand(1..20)
     puts "What does #{a} plus #{b} equal?"
-    answer = "> #{gets.chomp.to_i}"
+    answer = gets.chomp.to_i
 
     if answer == (a + b)
-      puts a + b
-      return "YEP! #{answer} is CORRECT!"
+      puts "YEP! #{answer} is CORRECT! :3"
     else
-      puts a + b
-      return "#{answer} is WRONG!"
+      @players[@currentPlayer][:lives] -= 1
+      puts "#{answer} is WRONG! xD The answer is #{a + b}!"
     end
   end
 
@@ -50,8 +45,7 @@ class Game
       game_end @players[0]
       @inSession = false
     else
-      @players[@currentPlayer][:lives] -= 1
-      question
+      puts question
       puts "P1: #{@players[0][:lives]}/3 vs P2: #{@players[1][:lives]}/3"
       puts "--------NEW TURN--------"
       if @currentPlayer == 0
@@ -76,5 +70,5 @@ class Game
 
 end
 
-mathOff = Game.new([{ name: "Chuck", lives: 4 }, { name: "David", lives: 3 }])
+mathOff = Game.new([{ name: "Chuck", lives: 3 }, { name: "David", lives: 3 }])
 mathOff.game_loop
