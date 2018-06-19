@@ -43,8 +43,11 @@ class Game
   end
 
   def turn
-    if @players[0][:lives] == 0 || @players[1][:lives] == 0
+    if @players[0][:lives] == 0
       game_end @players[1]
+      @inSession = false
+    elsif @players[1][:lives] == 0
+      game_end @players[0]
       @inSession = false
     else
       @players[@currentPlayer][:lives] -= 1
@@ -68,10 +71,10 @@ class Game
   def game_end (winner)
     puts "The winner is -#{winner[:name]}- with a score of #{winner[:lives]}/3"
     puts "---X-GAME-x-OVER-X----"
-    puts "Buh bye :3"
+    puts "Buh bye! :3"
   end
 
 end
 
-mathOff = Game.new([{ name: "Chuck", lives: 3 }, { name: "David", lives: 3 }])
+mathOff = Game.new([{ name: "Chuck", lives: 4 }, { name: "David", lives: 3 }])
 mathOff.game_loop
