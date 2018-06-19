@@ -5,7 +5,6 @@
 #   def initialize(name, lives)
 #     @name = name
 #     @lives = lives
-#     @maxLives = lives
 #     @score = 0
 #   end
 
@@ -25,9 +24,8 @@ class Game
   def initialize(players)
     @players = players
     @inSession = true
-    @turnCount = 0
+    @currentPlayer = 0
   end
-
 
   def question
     a = rand(1..20)
@@ -45,24 +43,32 @@ class Game
   end
 
   def turn
-    @players.each do |currentPlayer|
-      currentPlayer[:lives] -= 1
+    if @players[0][:lives] == 0 || @players[1][:lives] == 0
+      game_end @players[1]
+      @inSession = false
+    else
+      @players[@currentPlayer][:lives] -= 1
       question
       puts "P1: #{@players[0][:lives]}/3 vs P2: #{@players[1][:lives]}/3"
       puts "--------NEW TURN--------"
+      if @currentPlayer == 0
+        @currentPlayer = 1
+      else
+        @currentPlayer = 0
+      end
     end
   end
 
   def game_loop
     while @inSession
-      #this is where the game happens
-      if @players[0][:lives] == 0 || @players[1][:lives] == 0
-        puts "---X-GAME-x-OVER-X----"
-        @inSession = false
-      else
-        turn
-      end
+      turn
     end
+  end
+
+  def game_end (winner)
+    puts "The winner is -#{winner[:name]}- with a score of #{winner[:lives]}/3"
+    puts "---X-GAME-x-OVER-X----"
+    puts "Buh bye :3"
   end
 
 end
